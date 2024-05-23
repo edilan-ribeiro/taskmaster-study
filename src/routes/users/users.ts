@@ -5,10 +5,10 @@ import mongoose from 'mongoose'
 const router = express.Router()
 
 router.get('/', async (req, res) => {
-	const { email } = req.body
+	const id = req.query.id
 
 	try {
-		const userData = await User.findOne({email})
+		const userData = await User.findOne({ _id: id })
 
 		if (!userData) {
 			res.status(404).json({ message: 'User not found' })
@@ -21,11 +21,11 @@ router.get('/', async (req, res) => {
 	}
 })
 
-router.post('/new', async (req, res) => {
+router.post('/', async (req, res) => {
 	const { name, email } = req.body
 
 	try {
-		const checkMail = await User.findOne({email})
+		const checkMail = await User.findOne({ email })
 
 		if (checkMail) {
 			res.status(409).json({ message: 'User already exists' })
@@ -43,22 +43,26 @@ router.post('/new', async (req, res) => {
 	}
 })
 
-router.put('/edit', async (req, res) => {
+router.put('/', async (req, res) => {
 	const { userId, name, email } = req.body
 
 	try {
 		if (!mongoose.Types.ObjectId.isValid(userId)) {
 			return res.status(409).json({ message: 'Invalid user' })
 		} else {
-			const checkDuplicatedMail = await User.findOne({ email, _id: { $ne: userId }})
+			const checkDuplicatedMail = await User.findOne({ email, _id: { $ne: userId } })
 
 			if (checkDuplicatedMail) {
 				res.status(409).json({ message: 'Email is already in use, try another' })
 			} else {
-				const editUser = await User.findByIdAndUpdate(userId, {
-					name,
-					email,
-				}, {new: true})
+				const editUser = await User.findByIdAndUpdate(
+					userId,
+					{
+						name,
+						email,
+					},
+					{ new: true }
+				)
 
 				res.status(200).json(editUser)
 			}
@@ -69,14 +73,14 @@ router.put('/edit', async (req, res) => {
 	}
 })
 
-router.delete('/remove', async (req, res) => {
+router.delete('/', async (req, res) => {
 	const { userId } = req.body
 
 	try {
 		if (!mongoose.Types.ObjectId.isValid(userId)) {
 			return res.status(409).json({ message: 'Invalid user' })
 		} else {
-			await User.deleteOne(userId)
+			await User.deleteOne({ _id: userId })
 
 			res.status(200).json({ message: 'User removed' })
 		}
