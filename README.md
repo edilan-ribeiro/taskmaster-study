@@ -91,7 +91,7 @@ Em resumo foi possível aprender e praticar:
 
 ## Utilização
 
-É importante ter o mongoDB rodando!
+É importante ter o mongoDB rodando e criar/configurar seu arquivo .env com a string de conexão!
 
 Após clonar, baixar ou fazer um fork, utilize o comando abaixo para instalar as dependências do projeto:
 
