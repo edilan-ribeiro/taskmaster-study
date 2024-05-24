@@ -99,6 +99,12 @@ Após clonar, baixar ou fazer um fork, utilize o comando abaixo para instalar as
 npm install
 ```
 
+Para rodar:
+
+```shell
+npm run dev
+```
+
 Esse projeto te permite:
 - Buscar dados através das rotas GET como por exemplo: dados de usuário e anotações criadas.
 - Adicionar anotações e usuários através das rotas POST
