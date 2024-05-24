@@ -601,6 +601,179 @@
 					}
 				}
 			}
+		},
+		"/task/simple-note/new": {
+			"post": {
+				"tags": ["Simple note task"],
+				"summary": "Create a new simple note task",
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/SimpleTask"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Success",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/SimpleTask"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Bad Request",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Not Found",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					},
+					"409": {
+						"description": "Conflict",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal Server Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/task/simple-note/edit/{id}": {
+			"put": {
+				"tags": ["Simple note task"],
+				"summary": "Edit an existing simple note task",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"description": "The ID of the task to be edited"
+						},
+						"description": "ID of the task"
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/SimpleTask"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Success",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/SimpleTask"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Bad Request",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Not Found",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal Server Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 	},
 	"components": {
@@ -610,14 +783,18 @@
 				"properties": {
 					"_id": {
 						"type": "string",
+						"description": "The id of the user",
 						"example": "60a6b35e903bb32b70d87ee3"
+						
 					},
 					"name": {
 						"type": "string",
+						"description": "The name of the user",
 						"example": "Jhon Medler"
 					},
 					"email": {
 						"type": "string",
+						"description": "The email of the user",
 						"example": "jhon.m@somemail.com"
 					}
 				}
@@ -627,10 +804,12 @@
 				"properties": {
 					"name": {
 						"type": "string",
+						"description": "The name of the user",
 						"example": "Jhon Medler"
 					},
 					"email": {
 						"type": "string",
+						"description": "The email of the user",
 						"example": "jhon.m@somemail.com"
 					}
 				}
@@ -640,25 +819,76 @@
 				"properties": {
 					"_id": {
 						"type": "string",
+						"description": "The id of the task",
 						"example": "60a6b35e903bb32b70d87ee3"
 					},
 					"description": {
 						"type": "string",
+						"description": "The description of the task",
 						"example": "Task description"
 					},
 					"isArchived": {
 						"type": "boolean",
+						"description": "If the task is archived",
 						"example": false
 					},
 					"createdAt": {
 						"type": "string",
+						"description": "The date the task was created",
 						"format": "date-time",
 						"example": "2023-05-19T16:39:57.065Z"
 					},
 					"updatedAt": {
 						"type": "string",
+						"description": "The date the task was last updated",
 						"format": "date-time",
 						"example": "2023-05-19T16:39:57.065Z"
+					}
+				}
+			},
+			"SimpleTask": {
+				"type": "object",
+				"properties": {
+					"taskName": {
+						"type": "string",
+						"description": "The name of the task",
+						"example": "New task! WHOO"
+					},
+					"taskDescription": {
+						"type": "string",
+						"description": "The description of the task",
+						"example": "This is a new task I created!"
+					},
+					"expiration": {
+						"type": "object",
+						"properties": {
+							"expires": {
+								"type": "boolean",
+								"description": "Whether the task has an expiration date or not",
+								"example": false
+							},
+							"date": {
+								"type": "string",
+								"format": "date-time",
+								"description": "The expiration date of the task (if applicable)",
+								"example": "2023-05-19T16:39:57.065Z"
+							}
+						}
+					},
+					"taskType": {
+						"type": "string",
+						"example": "simpleNote",
+						"description": "The type of the task (should be 'simpleNote')"
+					},
+					"userId": {
+						"type": "string",
+						"example": "664e80eb0dbaaa46f8c61faa",
+						"description": "The ID of the user associated with the task"
+					},
+					"noteContent": {
+						"type": "string",
+						"example": "This is my task content",
+						"description": "The content of the simple note"
 					}
 				}
 			}
