@@ -9,7 +9,7 @@ const taskSchema = new Schema(
 			expires: Boolean,
 			date: Date,
 		},
-		taskType: { type: String, required: true, enum: ['shoppingList', 'todoList', 'simpleNote'] },
+		taskType: { type: String, required: true, enum: ['simpleNote'] },
 		userId: { type: Schema.Types.ObjectId, ref: 'Users', required: true },
 	},
 	{ timestamps: true, discriminatorKey: 'taskType' }

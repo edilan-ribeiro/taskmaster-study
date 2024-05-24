@@ -5,19 +5,20 @@ import mongoose, { SortOrder } from 'mongoose'
 const router = express.Router()
 
 router.get('/', async (req, res) => {
-	const { order, limit, offset } = req.query
-	const { userId } = req.body
+	const { userId, order, limit, offset } = req.query
 
-	const sortOrder: SortOrder = order === 'desc'? -1 : 1;
+	const sortOrder: SortOrder = order === 'desc' ? -1 : 1
 
 	try {
-		
 		if (userId) {
-			const tasks = await Task.find({ userId }).sort({ createdAt: sortOrder }).limit(Number(limit)).skip(Number(offset))
+			const tasks = await Task.find({ userId: userId })
+				.sort({ createdAt: sortOrder })
+				.limit(Number(limit))
+				.skip(Number(offset))
 
 			res.status(200).json(tasks)
 		} else {
-			res.status(401).json({ message: 'User not found' })
+			res.status(404).json({ message: 'User not found' })
 		}
 	} catch (err) {
 		console.error(`Error retrieving data : ${err}`)
@@ -33,7 +34,7 @@ router.get('/:id', async (req, res) => {
 	}
 
 	try {
-		const getTask = await Task.findById(taskId)
+		const getTask = await Task.findById({_id: taskId})
 
 		if (getTask) {
 			res.status(200).json(getTask)
@@ -81,7 +82,7 @@ router.delete('/:id', async (req, res) => {
 	}
 
 	try {
-		const deleteTask = await Task.findByIdAndDelete(taskId)
+		const deleteTask = await Task.findByIdAndDelete({ _id: taskId })
 
 		if (deleteTask) {
 			res.status(200).json({ message: 'Task removed from database!' })
